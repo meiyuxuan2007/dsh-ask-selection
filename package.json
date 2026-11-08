@@ -1,0 +1,56 @@
+{
+  "name": "dsh-ask-selection",
+  "version": "0.2.0",
+  "description": "选中即追问：在会话回答与右侧栏文档预览（MD/文本/代码/PDF/Office/Excel）中选中内容后右键，直接向 LLM 追问或提出修改要求 / Ask about any selected text: right-click in chat answers or the right-sidebar document previews to question or request edits",
+  "license": "MIT",
+  "author": "梅钰轩 <meiyuxuans@foxmail.com> (https://github.com/meiyuxuan2007)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meiyuxuan2007/dsh-ask-selection.git"
+  },
+  "homepage": "https://github.com/meiyuxuan2007/dsh-ask-selection#readme",
+  "bugs": {
+    "url": "https://github.com/meiyuxuan2007/dsh-ask-selection/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "selection",
+    "context-menu",
+    "ask",
+    "sidebar",
+    "ui"
+  ],
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "lib",
+    "locale",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-sidebar-right",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  }
+}
