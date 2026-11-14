@@ -11,13 +11,14 @@
   - 文本类：自动带上文件路径、Markdown 小节标题、行号范围；
   - PDF / Office：自动带上文件路径与页码；
   - Excel：读取当前单元格（名称框 + 公式栏）与工作表名。
+- **右键菜单**：追问选中内容 / 要求修改选中内容 / 复制选中内容。
 - **两种回填**：`Enter` 直接发送到当前会话；「插入输入框」只把内容放进草稿，可以接着编辑。
-- **轻引用模式**：文本类文档可以只引用「文件路径 · 位置 + 开头 80 字」，让模型自己读原文，提示词更短，也不受引用截断影响。
+- **轻引用模式**：文档预览（Markdown、文本、代码、PDF、Office）在能拿到文件绝对路径与定位信息时，可以只引用「文件路径 · 位置 + 开头约 80 字」，让模型自己读原文，提示词更短，也不受引用截断影响；面板里「引用方式」默认是完整引用，需要时再切到轻引用。
 
 发出的消息是结构化引用，例如：
 
 ```text
-我想追问以下引用内容（来源：notes.md · 小节「部署」· 第 3 页）：
+我想追问以下引用内容（来源：notes.md · 小节「部署」· 第 3–12 行）：
 
 引用内容：
 > ……选中的原文……
@@ -25,6 +26,8 @@
 我的要求：
 这一段为什么要先建索引？
 ```
+
+PDF / Office 预览给的是页码，例如 `report.pdf · 第 3 页`；Excel 给的是 `预算.xlsx · 工作表「Q3」单元格 B12`。
 
 ## 安装
 
@@ -42,13 +45,15 @@ dsh plugin add dsh-ask-selection
 2. 右键，选「追问选中内容」或「要求修改选中内容」；
 3. 在面板里写要求，`Enter` 发送，或点「插入输入框」只放进草稿。
 
-「轻引用」对文本类文档生效；Excel / Office 这类二进制内容，以及会话选区，仍发完整引用。
+「轻引用」适用于能拿到绝对路径与定位信息的文档预览（文本、代码、Markdown、PDF、Office）；Excel 走单元格通道、会话选区在对话流里，这两者仍发完整引用。
 
 ## 已知边界
 
 - Excel 目前只取公式栏里的当前单元格，不批量取选中区域的多个单元格；
 - 图片预览没有可复制的文字，不处理；
-- 文本类行号基于预览的分页渲染，长文件只加载了前几页时，行号范围也只覆盖已加载的部分。
+- 文本类行号基于预览的分页渲染，长文件只加载了前几页时，行号范围也只覆盖已加载的部分；
+- 「轻引用」需要右侧栏能拿到文件的绝对路径与位置，拿不到时只能完整引用；
+- 聊天输入框里选中文字仍走浏览器原生右键菜单，不弹本插件的菜单。
 
 ## 兼容性
 
@@ -112,8 +117,9 @@ Right-click any selected text in DeepSeek Harness (dsh) Web — in chat answers 
   - Text-like previews carry the file path, Markdown section title and line range;
   - PDF / Office carry the file path and page number;
   - Excel reads the current cell (name box + formula bar) and the sheet name.
+- **Context menu**: Ask about selection / Request an edit / Copy selection.
 - **Two ways to use it**: `Enter` sends straight to the current conversation; "Insert into composer" only drops the text into the draft.
-- **Light quote mode**: for text-like documents you can quote just "path · location + first 80 chars" and let the model read the file itself.
+- **Light quote mode**: for document previews (Markdown, text, code, PDF, Office) whose absolute path and location are known, you can quote just "path · location + first ~80 characters" and let the model read the file itself; the panel defaults to a full quote and switches to light on demand.
 
 ### Install
 
@@ -129,11 +135,41 @@ Requires a dsh client with the Web UI and Node.js ≥ 22.
 
 Select text, right-click, pick "Ask about selection" or "Request an edit", type your request, then press `Enter` or "Insert into composer".
 
+Light quote applies to any document preview with a known absolute path and location; Excel (cell channel) and chat selections always send a full quote.
+
 ### Known limits
 
 - Excel: only the current cell in the formula bar is read, not a multi-cell range;
 - Image previews have no selectable text and are ignored;
-- Line numbers cover only the pages already rendered in the preview.
+- Line numbers cover only the pages already rendered in the preview;
+- Light quote needs the absolute path and location from the right sidebar; otherwise a full quote is used;
+- Selecting text inside the composer still uses the browser's native context menu.
+
+### Compatibility
+
+- Client: dsh Web (`dsh.client.platform = web`)
+- Node.js: ≥ 22
+- Runtime dependencies: none; UI copy comes from the host's `@deepseek-ai/dsh-client-locale` and falls back to a built-in dictionary when unavailable.
+
+### Changelog
+
+#### 0.2.0
+
+First public release: same features as 0.1.2, plus LICENSE, repository metadata, a bilingual README and an automated Release workflow.
+
+#### 0.1.2
+
+Bug fixes only:
+
+- send / insert now write the draft first and close the panel only on success;
+- chat-side detection uses the platform's real markers (`[data-chat-flow-kind]`, `[data-slot="conversation.chat.*"]`, `[data-conversation-scroll]`);
+- `dsh-resource://` internal addresses are no longer shown as file paths;
+- the built-in dictionary is complete, and a duplicate `locatorLabel` is gone.
+
+#### 0.1.1
+
+- light quote mode;
+- focus returns to the composer after "Insert into composer".
 
 ### License
 
