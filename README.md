@@ -37,7 +37,7 @@ dsh plugin add dsh-ask-selection
 
 也可以在 dsh 的插件页点「安装」，输入框里填 `dsh-ask-selection`。该输入框同样接受 Git 地址、tgz 包和本地绝对路径，方便装未发布的版本。
 
-要求：dsh 客户端带 Web 界面；Node.js ≥ 22。
+要求：dsh 客户端 ≥ 0.2.1-rc.3 且 < 0.3.0（带 Web 界面）；Node.js ≥ 22。
 
 ## 使用
 
@@ -57,7 +57,7 @@ dsh plugin add dsh-ask-selection
 
 ## 兼容性
 
-- 客户端：dsh Web（`dsh.client.platform = web`）
+- dsh 客户端：≥ 0.2.1-rc.3 且 < 0.3.0，需带 Web 界面（`engines.dsh` + `dsh.client.platform = web`）
 - Node.js：≥ 22
 - 运行时依赖：无第三方依赖；文案走宿主 `@deepseek-ai/dsh-client-locale`，不可用时回退内置词典
 
@@ -78,6 +78,15 @@ dsh plugin add dsh-ask-selection
 - 主题只用 `--dsw-alias-*` 官方 token。
 
 ## 变更记录
+
+### 0.2.1
+
+文档与元数据修订，代码未变：
+
+- README 对齐实际行为：轻引用同样适用于 PDF / Office 预览（Office 预览会先转成 PDF），Excel 与会话选区仍发完整引用；
+- 补上「复制选中内容」与菜单三项（追问 / 要求修改 / 复制）的说明；
+- 修正示例里「小节 + 页码」混用的问题，行号与页码分别举例；
+- 新增 `engines.dsh`（`>=0.2.1-rc.3 <0.3.0`），插件市场不再标记「未声明宿主版本要求」。
 
 ### 0.2.0
 
@@ -129,7 +138,7 @@ dsh plugin add dsh-ask-selection
 
 The install field in the dsh plugin page accepts the same value, plus a Git address, a tarball, or an absolute local path.
 
-Requires a dsh client with the Web UI and Node.js ≥ 22.
+Requires dsh client ≥ 0.2.1-rc.3 and < 0.3.0 with the Web UI, and Node.js ≥ 22.
 
 ### Usage
 
@@ -147,11 +156,20 @@ Light quote applies to any document preview with a known absolute path and locat
 
 ### Compatibility
 
-- Client: dsh Web (`dsh.client.platform = web`)
+- dsh client: ≥ 0.2.1-rc.3 and < 0.3.0, with the Web UI (`engines.dsh` + `dsh.client.platform = web`)
 - Node.js: ≥ 22
 - Runtime dependencies: none; UI copy comes from the host's `@deepseek-ai/dsh-client-locale` and falls back to a built-in dictionary when unavailable.
 
 ### Changelog
+
+#### 0.2.1
+
+Documentation and metadata only; no code changes:
+
+- the README now matches the real behavior: light quotes also cover PDF and Office previews (Office is rendered to PDF first), while Excel and chat selections still send a full quote;
+- documented all three menu actions, including "Copy selection";
+- fixed the mixed section/page example; line numbers and page numbers are now shown separately;
+- added `engines.dsh` (`>=0.2.1-rc.3 <0.3.0`), so the plugin marketplace no longer flags a missing host version requirement.
 
 #### 0.2.0
 
